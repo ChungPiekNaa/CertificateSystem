@@ -1,0 +1,208 @@
+.toolbar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+.search-box {
+  position: relative;
+  flex: 1;
+  min-width: 220px;
+  max-width: 340px;
+}
+
+.search-box input {
+  width: 100%;
+  padding: 10px 12px 10px 36px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  background: #fff;
+}
+
+.search-box input:focus {
+  outline: none;
+  border-color: var(--brand-blue);
+}
+
+.search-box svg {
+  position: absolute;
+  left: 11px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--ink-faint);
+}
+
+.table-card {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  box-sizing: border-box;
+  -webkit-overflow-scrolling: touch;
+}
+
+table.list {
+  width: 100%;
+  min-width: 700px;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+table.list thead th {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  text-align: left;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #ffffff;
+  font-weight: 700;
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--border);
+  background: #002466;
+}
+
+table.list tbody td {
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--border);
+  color: var(--ink);
+  vertical-align: middle;
+}
+
+table.list tbody tr:last-child td {
+  border-bottom: none;
+}
+
+table.list tbody tr:hover {
+  background: #fafbfd;
+}
+
+.ref-pill {
+  display: inline-block;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--brand-blue-dark);
+  background: #eaf3fb;
+  padding: 3px 9px;
+  border-radius: 999px;
+}
+
+.row-actions {
+  display: flex;
+  gap: 8px;
+}
+
+table.list tbody tr.deleted-certificate-row {
+  background: #f5f5f5;
+  opacity: 0.65;
+}
+
+table.list tbody tr.deleted-certificate-row td {
+  color: #7a7a7a;
+  text-decoration: line-through;
+}
+
+table.list tbody tr.deleted-certificate-row:hover {
+  background: #eeeeee;
+}
+
+.deleted-ref-pill {
+  color: #777777;
+  background: #e5e5e5;
+}
+
+table.list tbody tr.deleted-certificate-row button {
+  opacity: 0.7;
+  text-decoration: none;
+}
+
+table.list tbody tr.deleted-certificate-row button:disabled {
+  cursor: not-allowed;
+}
+
+.empty-state {
+  padding: 64px 20px;
+  text-align: center;
+  color: var(--ink-soft);
+}
+
+.empty-state svg {
+  color: var(--ink-faint);
+  margin-bottom: 14px;
+}
+
+.empty-state h3 {
+  margin: 0 0 6px;
+  color: var(--ink);
+  font-size: 16px;
+}
+
+.empty-state p {
+  margin: 0;
+  font-size: 14px;
+}
+
+.skeleton-row td {
+  padding: 16px 18px;
+}
+
+.skeleton-bar {
+  height: 12px;
+  border-radius: 6px;
+  background: linear-gradient(
+    90deg,
+    #eef1f5 25%,
+    #e4e9ef 37%,
+    #eef1f5 63%
+  );
+  background-size: 400% 100%;
+  animation: shimmer 1.4s ease infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: 100% 0;
+  }
+
+  100% {
+    background-position: 0 0;
+  }
+}
+
+.participant-list-page {
+  height: calc(100vh - 82px);
+  overflow: hidden;
+}
+
+.participant-list-page .table-card {
+  max-height: calc(100vh - 215px);
+  overflow-x: auto;
+  overflow-y: auto;
+  box-sizing: border-box;
+  -webkit-overflow-scrolling: touch;
+}
+
+@media (max-width: 640px) {
+  .participant-list-page {
+    height: calc(100vh - 66px);
+  }
+
+  .participant-list-page .table-card {
+    max-height: calc(100vh - 220px);
+    overflow-x: auto;
+    overflow-y: auto;
+  }
+
+  .table-card {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  table.list {
+    min-width: 700px;
+  }
+}

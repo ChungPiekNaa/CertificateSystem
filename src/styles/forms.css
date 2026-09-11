@@ -1,0 +1,341 @@
+.card {
+  background: var(--surface);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+  border: 1px solid var(--border);
+}
+
+.generate-shell {
+  display: flex;
+  flex-direction: column;
+}
+
+@media (min-width: 901px) {
+  .generate-shell {
+    min-height: 560px;
+    overflow: visible;
+  }
+
+  .generate-shell .generate-grid {
+    flex: 1 1 auto;
+    min-height: 0;
+  }
+}
+
+/* =========================
+   GENERATE GRID
+   ========================= */
+
+.generate-grid {
+  display: grid;
+
+  /* Equal width for both panels */
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+
+  gap: 28px;
+
+  align-items: stretch;
+
+  width: 100%;
+  box-sizing: border-box;
+}
+
+@media (max-width: 900px) {
+  .generate-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.generate-left {
+  position: relative;
+  min-width: 0;
+}
+
+.form-card {
+  padding: 24px 24px 22px;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+}
+
+.generate-left .form-card {
+  height: 100%;
+}
+
+.field {
+  margin-bottom: 18px;
+}
+
+/* =========================
+   FIELD LABEL
+   ========================= */
+
+.field label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink-soft);
+  margin-bottom: 6px;
+}
+
+/* Required field marker */
+.required-mark {
+  color: #dc2626;
+  margin-left: 2px;
+}
+
+/* =========================
+   FIELD LABEL + FONT CONTROL
+   ========================= */
+
+.field-label-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.field-label-row label {
+  margin-bottom: 0;
+}
+
+/* =========================
+   FONT SIZE CONTROL
+   ========================= */
+
+.font-size-control {
+  display: flex;
+  align-items: center;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.font-size-control button {
+  min-width: 30px;
+  height: 26px;
+  padding: 0 6px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1px;
+
+  border: none;
+  background: #fafbfd;
+  color: var(--ink-soft);
+
+  cursor: pointer;
+}
+
+.font-size-control button:first-child {
+  border-right: 1px solid var(--border);
+}
+
+.font-size-control button:hover:not(:disabled) {
+  background: #eaf3fb;
+  color: var(--brand-blue);
+}
+
+.font-size-control button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* =========================
+   INPUTS
+   ========================= */
+
+.field input,
+.field textarea {
+  width: 100%;
+
+  padding: 11px 13px;
+
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+
+  font-size: 14.5px;
+  color: var(--ink);
+
+  background: #fafbfd;
+
+  transition:
+    border-color 0.15s ease,
+    background 0.15s ease;
+
+  box-sizing: border-box;
+}
+
+.field input:focus,
+.field textarea:focus {
+  outline: none;
+  border-color: var(--brand-blue);
+  background: #fff;
+}
+
+.field-error {
+  font-size: 12px;
+  color: #c0392b;
+  margin-top: 5px;
+}
+
+/* =========================
+   PRINT BUTTON
+   ========================= */
+
+.icon-print-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 44px;
+  height: 44px;
+
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+
+  background: #fafbfd;
+  color: var(--ink-soft);
+
+  cursor: pointer;
+
+  margin: 2px 0 18px 0;
+
+  transition:
+    background 0.15s ease,
+    color 0.15s ease,
+    border-color 0.15s ease;
+}
+
+.icon-print-btn:hover {
+  background: #eaf3fb;
+  color: var(--brand-blue);
+  border-color: var(--brand-blue);
+}
+
+/* =========================
+   FORM ACTIONS
+   ========================= */
+
+.form-actions {
+  display: flex;
+  gap: 10px;
+
+  margin-top: auto;
+  padding-top: 20px;
+}
+
+/* =========================
+   WORDING LINK
+   ========================= */
+
+.wording-link-row {
+  display: flex;
+  justify-content: flex-start;
+
+  border-top: 1px dashed var(--border);
+
+  padding-top: 14px;
+  margin-bottom: 4px;
+}
+
+/* =========================
+   WORDING POPOVER
+   ========================= */
+
+.wording-popover {
+  position: absolute;
+  inset: 0;
+
+  z-index: 5;
+
+  background: var(--surface);
+
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-card);
+
+  padding: 22px 24px;
+
+  display: flex;
+  flex-direction: column;
+}
+
+.wording-popover-fields {
+  flex: 1 1 auto;
+  overflow: auto;
+}
+
+/* =========================
+   PREVIEW
+   ========================= */
+
+.preview-card {
+  padding: 20px;
+
+  display: flex;
+  flex-direction: column;
+
+  min-width: 0;
+
+  box-sizing: border-box;
+}
+
+.preview-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  margin-bottom: 14px;
+}
+
+.preview-head h3 {
+  margin: 0;
+
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+
+  color: var(--ink-faint);
+
+  font-weight: 700;
+}
+
+.preview-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.preview-stage {
+  background: #e7ecf2;
+
+  border-radius: var(--radius-md);
+
+  padding: 16px;
+
+  display: flex;
+  justify-content: center;
+
+  box-sizing: border-box;
+
+  min-width: 0;
+}
+
+@media (min-width: 901px) {
+  .generate-fit-stage {
+    flex: 1 1 auto;
+
+    min-height: 0;
+
+    align-items: center;
+  }
+
+  .generate-fit-stage .certificate {
+    width: auto;
+    height: 100%;
+    max-width: 100%;
+  }
+}

@@ -1,0 +1,414 @@
+.certificate {
+  position: relative;
+  width: 100%;
+  max-width: 640px;
+
+  /* A4 portrait ratio: 210mm × 297mm */
+  aspect-ratio: 210 / 297;
+
+  overflow: hidden;
+
+  /* ALL TEXT USES ARIAL */
+  font-family: Arial, Helvetica, sans-serif;
+  color: #5b6470;
+  background: #fff;
+
+  /* Default values for individual text scaling */
+  --text-scale: 1;
+  --wording-scale: 1;
+
+  /* Individual text scaling */
+  --name-scale: 1;
+  --user-id-scale: 1;
+  --course-title-scale: 1;
+  --date-scale: 1;
+}
+
+
+/* =========================
+   CERTIFICATE BACKGROUND
+   ========================= */
+
+.certificate-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+
+  width: 100%;
+  height: 100%;
+
+  object-fit: fill;
+  display: block;
+
+  z-index: 0;
+}
+
+
+/* =========================
+   REFERENCE ID
+   ========================= */
+
+.cert-refno {
+  position: absolute;
+
+  top: 3.2%;
+  right: 6%;
+
+  font-family: Arial, Helvetica, sans-serif;
+
+  font-size: clamp(
+    8px,
+    calc(var(--cert-scale, 1) * 13px),
+    16px
+  );
+
+  color: #5b6470;
+  letter-spacing: 0.02em;
+
+  z-index: 1;
+}
+
+
+/* =========================
+   CERTIFICATE CONTENT
+   ========================= */
+
+.cert-inner {
+  position: absolute;
+
+  inset: 0;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  text-align: center;
+
+  font-family: Arial, Helvetica, sans-serif;
+
+  padding: 9% 12% 8%;
+
+  z-index: 1;
+}
+
+
+/* =========================
+   CERTIFICATE HEADING
+   ========================= */
+
+.cert-heading {
+  font-family: Arial, Helvetica, sans-serif;
+  font-weight: 700;
+
+  font-size: clamp(
+    18px,
+    calc(var(--cert-scale, 1) * 28px),
+    48px
+  );
+
+  color: #5b6470;
+
+  margin:
+    calc(var(--cert-scale, 1) * 130px)
+    0
+    8%;
+
+  letter-spacing: 0.01em;
+}
+
+
+/* =========================
+   NORMAL TEXT
+   ========================= */
+
+.cert-line {
+  font-family: Arial, Helvetica, sans-serif;
+
+  font-size:
+    calc(
+      var(--cert-scale, 1)
+      * 16px
+      * var(--wording-scale, 1)
+    );
+
+  color: #5b6470;
+
+  margin: 0;
+}
+
+
+/* =========================
+   PARTICIPANT NAME
+   ========================= */
+
+.cert-name {
+  font-family: Arial, Helvetica, sans-serif;
+  font-weight: 700;
+
+  font-size:
+    calc(
+      var(--cert-scale, 1)
+      * 24px
+      * var(--text-scale, 1)
+      * var(--name-scale, 1)
+    );
+
+  color: #5b6470;
+
+  margin: 12% 0 5%;
+
+  padding: 0 4px;
+
+  word-break: break-word;
+
+  padding-bottom: 2.2%;
+
+  min-width: 55%;
+}
+
+
+/* =========================
+   USER ID
+   ========================= */
+
+.cert-user-id {
+  font-family: Arial, Helvetica, sans-serif;
+
+  font-size:
+    calc(
+      var(--cert-scale, 1)
+      * 18px
+      * var(--user-id-scale, 1)
+    );
+
+  color: #5b6470;
+
+  margin: 0 0 10%;
+
+  letter-spacing: 0.01em;
+}
+
+
+/* =========================
+   COURSE TITLE
+   ========================= */
+
+.cert-title {
+  font-weight: 700;
+
+  font-family: Arial, Helvetica, sans-serif;
+
+  font-size:
+    calc(
+      var(--cert-scale, 1)
+      * 22px
+      * var(--text-scale, 1)
+      * var(--course-title-scale, 1)
+    );
+
+  color: #5b6470;
+
+  margin: 8% 0 8%;
+
+  padding: 0 6px;
+}
+
+
+/* =========================
+   ON + DATE
+   ========================= */
+
+.cert-on {
+  display: flex;
+  flex-direction: row;
+
+  align-items: baseline;
+  justify-content: center;
+
+  flex-wrap: nowrap;
+  flex-shrink: 0;
+
+  width: max-content;
+  max-width: none;
+
+  white-space: nowrap;
+
+  font-family: Arial, Helvetica, sans-serif;
+
+  font-size:
+    calc(
+      var(--cert-scale, 1)
+      * 18px
+      * var(--wording-scale, 1)
+    );
+
+  color: #5b6470;
+
+  margin: 0 0 3%;
+
+  letter-spacing: 0.01em;
+}
+
+
+/* =========================
+   ON LABEL
+   ========================= */
+
+.cert-on-label {
+  display: inline;
+  white-space: nowrap;
+
+  font-family: Arial, Helvetica, sans-serif;
+
+  /* Make "On:" bold */
+  font-weight: 700;
+
+  color: #5b6470;
+}
+
+
+/* =========================
+   DATE
+   ========================= */
+
+.cert-on-date {
+  display: inline;
+
+  white-space: nowrap;
+
+  font-family: Arial, Helvetica, sans-serif;
+
+  font-size:
+    calc(
+      var(--cert-scale, 1)
+      * 18px
+      * var(--date-scale, 1)
+    );
+
+  font-weight: 400;
+
+  color: #5b6470;
+
+  letter-spacing: 0.01em;
+
+  /* Space between "On:" and the date */
+  margin-left: 0.5em;
+}
+
+
+/* =========================
+   CONDUCTED BY
+   ========================= */
+
+.cert-by {
+  font-family: Arial, Helvetica, sans-serif;
+
+  font-size:
+    calc(
+      var(--cert-scale, 1)
+      * 18px
+      * var(--wording-scale, 1)
+    );
+
+  color: #5b6470;
+
+  margin: 12% 0 3%;
+}
+
+
+/* =========================
+   FACILITY
+   ========================= */
+
+.cert-facility {
+  font-family: Arial, Helvetica, sans-serif;
+  font-weight: 700;
+
+  font-size:
+    calc(
+      var(--cert-scale, 1)
+      * 19px
+      * var(--wording-scale, 1)
+    );
+
+  color: #5b6470;
+
+  margin: 0 0 3%;
+}
+
+
+/* =========================
+   ISSUING DIVISION
+   ========================= */
+
+.cert-div {
+  font-family: Arial, Helvetica, sans-serif;
+
+  font-size:
+    calc(
+      var(--cert-scale, 1)
+      * 17px
+      * var(--wording-scale, 1)
+    );
+
+  color: #5b6470;
+
+  margin: 0;
+}
+
+/* =========================
+   PRINT
+   ========================= */
+
+@media print {
+
+  body * {
+    visibility: hidden;
+  }
+
+  .print-target,
+  .print-target * {
+    visibility: visible;
+  }
+
+  .print-target {
+    --cert-scale: 1.2402 !important;
+
+    position: fixed;
+
+    top: 0;
+    left: 0;
+
+    width: 210mm;
+    height: 297mm;
+
+    max-width: none;
+
+    margin: 0;
+
+    overflow: hidden;
+
+    box-shadow: none;
+
+    font-family: Arial, Helvetica, sans-serif;
+  }
+
+  .certificate-background {
+    position: absolute;
+
+    top: 0;
+    left: 0;
+
+    width: 210mm;
+    height: 297mm;
+
+    object-fit: fill;
+
+    display: block;
+  }
+
+  @page {
+    size: A4 portrait;
+    margin: 0;
+  }
+}
