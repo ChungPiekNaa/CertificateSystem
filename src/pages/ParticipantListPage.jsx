@@ -7,13 +7,16 @@ import { useCertificates } from "../hooks/useCertificates";
 import { useToast } from "../context/ToastContext";
 
 export default function ParticipantListPage() {
+  // Get certificate records and actions from the certificate hook
   const { certificates, loading, remove } = useCertificates();
   const showToast = useToast();
   const navigate = useNavigate();
 
+  // Store the search text and currently selected certificate
   const [query, setQuery] = useState("");
   const [activeRecord, setActiveRecord] = useState(null);
 
+  // Filter certificates based on the search text
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
 
@@ -33,6 +36,13 @@ export default function ParticipantListPage() {
     );
   }, [certificates, query]);
 
+  // Only active certificates can be exported
+  const filteredActive = useMemo(
+    () => filtered.filter((record) => record.status === "ACTIVE"),
+    [filtered]
+  );
+
+  // Delete the selected certificate record
   const handleDelete = async (id) => {
     try {
       await remove(id);
@@ -45,6 +55,7 @@ export default function ParticipantListPage() {
     }
   };
 
+  // Open the certificate page with the selected record for editing
   const handleEdit = (record) => {
     setActiveRecord(null);
 
@@ -55,17 +66,15 @@ export default function ParticipantListPage() {
     });
   };
 
+  // Export active certificate records to Excel
   const handleExportExcel = () => {
-    const activeCertificates = certificates.filter(
-      (record) => record.status === "ACTIVE"
-    );
-
-    if (activeCertificates.length === 0) {
+    if (filteredActive.length === 0) {
       showToast("No active certificates to export", true);
       return;
     }
 
-    const exportData = activeCertificates.map((record) => ({
+    // Prepare the certificate data and format the dates for Excel
+    const exportData = filteredActive.map((record) => ({
       "Ref ID": record.ref_id,
       "User ID": record.user_id,
       "Participant Name": record.participant_name,
@@ -86,8 +95,10 @@ export default function ParticipantListPage() {
         : "",
     }));
 
+    // Convert the certificate data into an Excel worksheet
     const worksheet = XLSX.utils.json_to_sheet(exportData);
 
+    // Set the column widths for the exported Excel file
     worksheet["!cols"] = [
       { wch: 12 },
       { wch: 15 },
@@ -103,6 +114,7 @@ export default function ParticipantListPage() {
       { wch: 50 },
     ];
 
+    // Create a workbook and add the certificate worksheet
     const workbook = XLSX.utils.book_new();
 
     XLSX.utils.book_append_sheet(
@@ -111,15 +123,24 @@ export default function ParticipantListPage() {
       "Certificates"
     );
 
+    // Use the current date in the exported filename
     const date = new Date().toISOString().slice(0, 10);
+
+    // Use a different filename when a search filter is applied
+    const filenamePrefix = query.trim()
+      ? "Certificate_Records_Filtered"
+      : "Certificate_Records";
 
     XLSX.writeFile(
       workbook,
-      `Certificate_Records_${date}.xlsx`
+      `${filenamePrefix}_${date}.xlsx`
     );
 
+    // Notify the user after the export is completed
     showToast(
-      `${activeCertificates.length} active certificate(s) exported`
+      `${filteredActive.length} certificate(s) exported${
+        query.trim() ? " (filtered)" : ""
+      }`
     );
   };
 
@@ -144,7 +165,7 @@ export default function ParticipantListPage() {
           <button
             className="btn btn-excel btn-sm"
             onClick={handleExportExcel}
-            disabled={loading}
+            disabled={loading || filteredActive.length === 0}
           >
             <svg
               width="14"
