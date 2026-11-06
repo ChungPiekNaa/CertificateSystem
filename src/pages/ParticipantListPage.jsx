@@ -12,26 +12,40 @@ export default function ParticipantListPage() {
   const navigate = useNavigate();
 
   const [query, setQuery] = useState("");
+  const [typeFilter, setTypeFilter] = useState("ALL"); // "ALL" | "COURSE" | "EXAM"
   const [activeRecord, setActiveRecord] = useState(null);
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
 
-    if (!q) return certificates;
+    return certificates.filter((r) => {
+      const matchesType =
+        typeFilter === "ALL" ||
+        (r.certificate_type || "COURSE") === typeFilter;
 
-    return certificates.filter((r) =>
-      [
+      if (!matchesType) return false;
+
+      if (!q) return true;
+
+      return [
         r.ref_id,
         r.user_id,
+        r.ic_number,
+        r.class_id,
         r.participant_name,
         r.course_title,
         r.certificate_date,
         r.created_at,
-      ].some((value) =>
-        String(value ?? "").toLowerCase().includes(q)
-      )
-    );
-  }, [certificates, query]);
+        r.certificate_type,
+        r.result,
+      ].some((value) => String(value ?? "").toLowerCase().includes(q));
+    });
+  }, [certificates, query, typeFilter]);
+
+  const filteredActive = useMemo(
+    () => filtered.filter((record) => record.status === "ACTIVE"),
+    [filtered]
+  );
 
   const handleDelete = async (id) => {
     try {
@@ -56,51 +70,53 @@ export default function ParticipantListPage() {
   };
 
   const handleExportExcel = () => {
-    const activeCertificates = certificates.filter(
-      (record) => record.status === "ACTIVE"
-    );
-
-    if (activeCertificates.length === 0) {
+    if (filteredActive.length === 0) {
       showToast("No active certificates to export", true);
       return;
     }
 
-    const exportData = activeCertificates.map((record) => ({
-      "Ref ID": record.ref_id,
-      "User ID": record.user_id,
-      "Participant Name": record.participant_name,
-      "Course Title": record.course_title,
-      "Date Attended": record.certificate_date
-        ? new Date(record.certificate_date).toLocaleDateString("en-GB", {
-            day: "2-digit",
-            month: "short",
-            year: "numeric",
-          })
-        : "",
-      "Date Issued": record.created_at
-        ? new Date(record.created_at).toLocaleDateString("en-GB", {
-            day: "2-digit",
-            month: "short",
-            year: "numeric",
-          })
-        : "",
-    }));
+    const exportData = filteredActive.map((record) => {
+      const isExam = record.certificate_type === "EXAM";
+
+      return {
+        "Ref ID": record.ref_id,
+        Type: isExam ? "Exam" : "Course",
+        "User ID": record.user_id,
+        "IC Number": record.ic_number,
+        "Class ID": record.class_id,
+        "Participant Name": record.participant_name,
+        "Course Title": record.course_title,
+        "Date Attended": record.certificate_date
+          ? new Date(record.certificate_date).toLocaleDateString("en-GB", {
+              day: "2-digit",
+              month: "short",
+              year: "numeric",
+            })
+          : "",
+        "Date Issued": record.created_at
+          ? new Date(record.created_at).toLocaleDateString("en-GB", {
+              day: "2-digit",
+              month: "short",
+              year: "numeric",
+            })
+          : "",
+        Result: isExam ? record.result || "" : "",
+      };
+    });
 
     const worksheet = XLSX.utils.json_to_sheet(exportData);
 
     worksheet["!cols"] = [
-      { wch: 12 },
-      { wch: 15 },
-      { wch: 25 },
-      { wch: 35 },
-      { wch: 18 },
-      { wch: 18 },
-      { wch: 35 },
-      { wch: 35 },
-      { wch: 15 },
-      { wch: 25 },
-      { wch: 35 },
-      { wch: 50 },
+      { wch: 12 }, // Ref ID
+      { wch: 10 }, // Type
+      { wch: 15 }, // User ID
+      { wch: 16 }, // IC Number
+      { wch: 14 }, // Class ID
+      { wch: 25 }, // Participant Name
+      { wch: 35 }, // Course Title
+      { wch: 18 }, // Date Attended
+      { wch: 18 }, // Date Issued
+      { wch: 10 }, // Result
     ];
 
     const workbook = XLSX.utils.book_new();
@@ -113,13 +129,23 @@ export default function ParticipantListPage() {
 
     const date = new Date().toISOString().slice(0, 10);
 
-    XLSX.writeFile(
-      workbook,
-      `Certificate_Records_${date}.xlsx`
-    );
+    const typePrefix =
+      typeFilter === "COURSE"
+        ? "Course_"
+        : typeFilter === "EXAM"
+        ? "Exam_"
+        : "";
+
+    const searchSuffix = query.trim() ? "_Filtered" : "";
+
+    const filename = `${typePrefix}Certificate_Records${searchSuffix}_${date}.xlsx`;
+
+    XLSX.writeFile(workbook, filename);
 
     showToast(
-      `${activeCertificates.length} active certificate(s) exported`
+      `${filteredActive.length} certificate(s) exported${
+        query.trim() || typeFilter !== "ALL" ? " (filtered)" : ""
+      }`
     );
   };
 
@@ -127,7 +153,7 @@ export default function ParticipantListPage() {
     <section className="participant-list-page">
       <div className="page-head">
         <div>
-          <h1>Participant List</h1>
+          <h1>Non-Staff Participant List</h1>
 
           <p>
             View all generated certificates with the most recent displayed first
@@ -144,7 +170,7 @@ export default function ParticipantListPage() {
           <button
             className="btn btn-excel btn-sm"
             onClick={handleExportExcel}
-            disabled={loading}
+            disabled={loading || filteredActive.length === 0}
           >
             <svg
               width="14"
@@ -209,12 +235,37 @@ export default function ParticipantListPage() {
             onChange={(e) => setQuery(e.target.value)}
           />
         </div>
+
+        <div className="type-filter" role="group" aria-label="Filter by certificate type">
+          <button
+            type="button"
+            className={typeFilter === "ALL" ? "active" : ""}
+            onClick={() => setTypeFilter("ALL")}
+          >
+            All
+          </button>
+          <button
+            type="button"
+            className={typeFilter === "COURSE" ? "active" : ""}
+            onClick={() => setTypeFilter("COURSE")}
+          >
+            Course
+          </button>
+          <button
+            type="button"
+            className={typeFilter === "EXAM" ? "active" : ""}
+            onClick={() => setTypeFilter("EXAM")}
+          >
+            Exam
+          </button>
+        </div>
       </div>
 
       <HistoryTable
         records={filtered}
         loading={loading}
         onView={setActiveRecord}
+        typeFilter={typeFilter}
       />
 
       {activeRecord && (

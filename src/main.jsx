@@ -12,6 +12,7 @@ import "./styles/table.css";
 import "./styles/certificate.css";
 import "./styles/modal.css";
 import "./styles/toast.css";
+import "./styles/bulk.css";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useToast } from "../context/ToastContext";
 import FontSizeControl from "./FontSizeControl";
 
-const FIELDS = [
+const COURSE_FIELDS = [
   {
     key: "presented_text",
     label: "Presented line",
@@ -36,7 +36,47 @@ const FIELDS = [
   },
 ];
 
+const EXAM_FIELDS = [
+  {
+    key: "presented_text",
+    label: "Presented line",
+    placeholder: "This result slip is presented to",
+  },
+  {
+    key: "completing_text",
+    label: "Completion line",
+    placeholder: "for attending examination on",
+  },
+  {
+    key: "on_text",
+    label: "On line",
+    placeholder: "On:",
+  },
+  {
+    key: "by_text",
+    label: '"By" line',
+    placeholder: "conducted by",
+  },
+  {
+    key: "facility_text",
+    label: "Facility line",
+    placeholder: "Sarawak Energy Learning Centre",
+  },
+  {
+    key: "div_text",
+    label: "Issuing division",
+    placeholder:
+      "Learning & Development and Capability Management Division",
+  },
+  {
+    key: "result_label_text",
+    label: "Result label",
+    placeholder: "Result",
+  },
+];
+
 export default function WordingSettingsModal({
+  certificateType,
   settings,
   wordingScales,
   onSave,
@@ -45,6 +85,8 @@ export default function WordingSettingsModal({
   onChangeSettings,
 }) {
   const showToast = useToast();
+  const isExam = certificateType === "EXAM";
+  const FIELDS = isExam ? EXAM_FIELDS : COURSE_FIELDS;
 
   const [draft, setDraft] = useState(settings);
   const [saving, setSaving] = useState(false);
@@ -102,7 +144,10 @@ export default function WordingSettingsModal({
   return (
     <div className="wording-popover">
       <div className="modal-head">
-        <h3>Change other wordings</h3>
+        <h3>
+          Change other wordings
+          {isExam ? " (Exam)" : " (Course)"}
+        </h3>
 
         <button
           type="button"

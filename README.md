@@ -6,12 +6,13 @@ A React-based certificate generation and management system for creating, editing
 
 * Generate certificates with a fixed certificate layout and live preview
 * Customize certificate wording and font sizes
-* Automatically generate sequential certificate Ref IDs
+* Automatically generate unique certificate Ref IDs
 * View and search generated certificates
 * Edit existing certificate records
 * Soft delete certificates while retaining the records
 * Print certificates using the browser print function
 * Export active certificate records to Excel
+* Generate multiple certificates in bulk
 
 ## Technology
 

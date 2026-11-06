@@ -3,6 +3,7 @@ import { Routes, Route } from "react-router-dom";
 import Sidebar from "./components/Sidebar";
 import GenerateCertificatePage from "./pages/GenerateCertificatePage";
 import ParticipantListPage from "./pages/ParticipantListPage";
+import BulkGeneratePage from "./pages/BulkGeneratePage";
 
 export default function App() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -24,6 +25,7 @@ export default function App() {
         <Routes>
           <Route path="/" element={<GenerateCertificatePage />} />
           <Route path="/history" element={<ParticipantListPage />} />
+          <Route path="/bulk" element={<BulkGeneratePage />} />
         </Routes>
       </main>
     </div>

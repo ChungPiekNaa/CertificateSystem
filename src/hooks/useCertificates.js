@@ -12,7 +12,7 @@ export function useCertificates() {
     const { data, error: fetchError } = await supabase
       .from(CERTIFICATES_TABLE)
       .select("*")
-      .order("created_at", { ascending: false });
+      .order("ref_no", { ascending: false });
 
     if (fetchError) {
       setError(fetchError);
@@ -42,9 +42,42 @@ export function useCertificates() {
       throw insertError;
     }
 
-    setCertificates((prev) => [data, ...prev]);
+    setCertificates((prev) =>
+      [data, ...prev].sort(
+        (a, b) => Number(b.ref_no) - Number(a.ref_no)
+      )
+    );
 
     return data;
+  }, []);
+
+  const createMany = useCallback(async (rows) => {
+    const { data, error: insertError } = await supabase
+      .from(CERTIFICATES_TABLE)
+      .insert(
+        rows.map((row) => ({
+          ...row,
+          status: "ACTIVE",
+        }))
+      )
+      .select();
+
+    if (insertError) {
+      throw insertError;
+    }
+
+    const newRecords = data || [];
+
+    setCertificates((prev) =>
+      [...newRecords, ...prev].sort(
+        (a, b) => Number(b.ref_no) - Number(a.ref_no)
+      )
+    );
+
+    // Keep bulk printing in Ref ID order: 000006, 000007, 000008
+    return [...newRecords].sort(
+      (a, b) => Number(a.ref_no) - Number(b.ref_no)
+    );
   }, []);
 
   const update = useCallback(async (id, payload) => {
@@ -60,9 +93,11 @@ export function useCertificates() {
     }
 
     setCertificates((prev) =>
-      prev.map((certificate) =>
-        certificate.id === id ? data : certificate
-      )
+      prev
+        .map((certificate) =>
+          certificate.id === id ? data : certificate
+        )
+        .sort((a, b) => Number(b.ref_no) - Number(a.ref_no))
     );
 
     return data;
@@ -81,15 +116,17 @@ export function useCertificates() {
     }
 
     setCertificates((prev) =>
-      prev.map((certificate) =>
-        certificate.id === id
-          ? {
-              ...certificate,
-              status: "DELETED",
-              ...data,
-            }
-          : certificate
-      )
+      prev
+        .map((certificate) =>
+          certificate.id === id
+            ? {
+                ...certificate,
+                status: "DELETED",
+                ...data,
+              }
+            : certificate
+        )
+        .sort((a, b) => Number(b.ref_no) - Number(a.ref_no))
     );
 
     return data;
@@ -118,6 +155,7 @@ export function useCertificates() {
     error,
     load,
     create,
+    createMany,
     update,
     remove,
     nextRefIdGuess,

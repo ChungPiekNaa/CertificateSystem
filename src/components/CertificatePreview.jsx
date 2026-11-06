@@ -5,17 +5,21 @@ const BASE_WIDTH = 640;
 
 const CertificatePreview = forwardRef(function CertificatePreview(
   {
+    certificateType = "COURSE",
+
     refId,
     name,
     userID,
     courseTitle,
     date,
+    result,
     presentedText,
     completingText,
     onText,
     byText,
     facilityText,
     divText,
+    resultLabelText,
 
     // Individual font-size controls
     nameScale = 1,
@@ -27,10 +31,14 @@ const CertificatePreview = forwardRef(function CertificatePreview(
     wordingScales = {},
 
     printable = false,
+    // Used by the bulk-generate flow: one certificate per printed page,
+    // rendered off-screen until print time. See certificate.css.
+    bulkPrintable = false,
   },
   forwardedRef
 ) {
   const localRef = useRef(null);
+  const isExam = certificateType === "EXAM";
 
   // Keep forwarded ref pointed to the certificate DOM node
   useEffect(() => {
@@ -86,12 +94,19 @@ const CertificatePreview = forwardRef(function CertificatePreview(
   const divScale =
     wordingScales?.div_text ?? 1;
 
+  const resultLabelScale =
+    wordingScales?.result_label_text ?? 1;
+
+  const heading = isExam
+    ? "Examination Result Slip"
+    : "Certificate of Completion";
+
   return (
     <div
       ref={localRef}
       className={`certificate ${
         printable ? "print-target" : ""
-      }`}
+      } ${bulkPrintable ? "bulk-print-target" : ""}`}
     >
       {/* Background */}
       <img
@@ -108,7 +123,7 @@ const CertificatePreview = forwardRef(function CertificatePreview(
       <div className="cert-inner">
         {/* Certificate heading */}
         <h2 className="cert-heading">
-          Certificate of Completion
+          {heading}
         </h2>
 
         {/* Presented line */}
@@ -118,7 +133,10 @@ const CertificatePreview = forwardRef(function CertificatePreview(
             "--wording-scale": presentedScale,
           }}
         >
-          {presentedText || "This certificate is presented to"}
+          {presentedText ||
+            (isExam
+              ? "This result slip is presented to"
+              : "This certificate is presented to")}
         </p>
 
         {/* Participant name */}
@@ -148,7 +166,10 @@ const CertificatePreview = forwardRef(function CertificatePreview(
             "--wording-scale": completingScale,
           }}
         >
-          {completingText || "for completing the course titled"}
+          {completingText ||
+            (isExam
+              ? "for attending examination on"
+              : "for completing the course titled")}
         </p>
 
         {/* Course title */}
@@ -210,6 +231,29 @@ const CertificatePreview = forwardRef(function CertificatePreview(
           {divText ||
             "Learning & Development and Capability Management Division"}
         </p>
+        
+        {/* Result block (EXAM certificates only) */}
+        {isExam && (
+          <>
+            <p
+              className="cert-result-label"
+              style={{
+                "--result-label-scale": resultLabelScale,
+              }}
+            >
+              {resultLabelText || "Result"}
+            </p>
+
+            <p
+              className="cert-result-value"
+              style={{
+                "--result-label-scale": resultLabelScale,
+              }}
+            >
+              {result || "Pass"}
+            </p>
+          </>
+        )}
       </div>
     </div>
   );

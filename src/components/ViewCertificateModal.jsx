@@ -81,21 +81,14 @@ export default function ViewCertificateModal({
         >
           <CertificatePreview
             printable
-
-            /* Certificate reference */
+            certificateType={record.certificate_type}
             refId={record.ref_id}
-
-            /* Participant information */
             name={record.participant_name}
             userID={record.user_id}
-
-            /* Course information */
             courseTitle={record.course_title}
-
-            /* Certificate date */
             date={record.certificate_date}
-
-            /* Certificate wording */
+            result={record.result}
+            resultLabelText={record.result_label_text}
             presentedText={record.presented_text}
             completingText={record.completing_text}
             onText={record.on_text}

@@ -2,22 +2,36 @@ import { useState } from "react";
 import FontSizeControl from "./FontSizeControl";
 
 export default function CertificateForm({
+  certificateType,
+
   name,
-  courseTitle,
   userID,
+  icNumber,
+  courseTitle,
+  classId,
   date,
+  result,
+
   nameScale,
-  courseTitleScale,
   userIDScale,
+  courseTitleScale,
   dateScale,
+  resultScale,
+
   onChangeName,
-  onChangeCourseTitle,
   onChangeUserID,
+  onChangeIcNumber,
+  onChangeCourseTitle,
+  onChangeClassId,
   onChangeDate,
+  onChangeResult,
+
   onChangeNameScale,
-  onChangeCourseTitleScale,
   onChangeUserIDScale,
+  onChangeCourseTitleScale,
   onChangeDateScale,
+  onChangeResultScale,
+
   onSubmit,
   onReset,
   onOpenWordingSettings,
@@ -25,6 +39,7 @@ export default function CertificateForm({
   error,
 }) {
   const [dateError, setDateError] = useState("");
+  const isExam = certificateType === "EXAM";
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -110,6 +125,24 @@ export default function CertificateForm({
       </div>
 
       {/* =========================
+          IC NUMBER
+          ========================= */}
+      <div className="field">
+        <label htmlFor="icNumber">
+          IC Number <span className="required-mark">*</span>
+        </label>
+
+        <input
+          id="icNumber"
+          type="text"
+          placeholder="e.g. 990101-13-4567"
+          value={icNumber}
+          onChange={(e) => onChangeIcNumber(e.target.value)}
+          required
+        />
+      </div>
+
+      {/* =========================
           COURSE TITLE
           ========================= */}
       <div className="field">
@@ -130,6 +163,24 @@ export default function CertificateForm({
           placeholder="e.g. Workplace Safety Fundamentals"
           value={courseTitle}
           onChange={(e) => onChangeCourseTitle(e.target.value)}
+          required
+        />
+      </div>
+
+      {/* =========================
+          CLASS ID
+          ========================= */}
+      <div className="field">
+        <label htmlFor="classId">
+          Class ID <span className="required-mark">*</span>
+        </label>
+
+        <input
+          id="classId"
+          type="text"
+          placeholder="e.g. 112233"
+          value={classId}
+          onChange={(e) => onChangeClassId(e.target.value)}
           required
         />
       </div>
@@ -167,6 +218,37 @@ export default function CertificateForm({
           </div>
         )}
       </div>
+
+      {/* =========================
+          RESULT — Exam only
+          ========================= */}
+      {isExam && (
+        <div className="field">
+          <div className="field-label-row">
+            <label htmlFor="result">
+              Result <span className="required-mark">*</span>
+            </label>
+
+            <FontSizeControl
+              value={resultScale}
+              onChange={onChangeResultScale}
+            />
+          </div>
+
+          <select
+            id="result"
+            value={result}
+            onChange={(e) => onChangeResult(e.target.value)}
+            required
+          >
+            <option value="" disabled>
+              Select Pass or Fail
+            </option>
+            <option value="Pass">Pass</option>
+            <option value="Fail">Fail</option>
+          </select>
+        </div>
+      )}
 
       {/* =========================
           PRINT BUTTON

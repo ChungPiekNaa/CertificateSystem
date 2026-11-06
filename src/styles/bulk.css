@@ -1,0 +1,44 @@
+.bulk-upload-card {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 14px;
+  margin-bottom: 20px;
+}
+
+.bulk-upload-card input[type="file"] {
+  display: none;
+}
+
+.bulk-upload-dropzone {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 32px;
+  border: 1.5px dashed var(--border);
+  border-radius: var(--radius-md);
+  color: var(--ink-soft);
+  font-size: 14px;
+  cursor: pointer;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+.bulk-upload-dropzone:hover {
+  border-color: var(--brand-blue);
+  background: #fafbfd;
+}
+
+.bulk-preview-card {
+  padding: 20px;
+}
+
+.bulk-preview-summary {
+  font-size: 14px;
+  margin-bottom: 14px;
+}
+
+.bulk-preview-warning {
+  color: #c0392b;
+}

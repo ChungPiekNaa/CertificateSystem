@@ -289,7 +289,7 @@
 .page-head {
   display: flex;
 
-  align-items: flex-start;
+  align-items: center;
   justify-content: space-between;
 
   gap: 20px;
@@ -335,4 +335,46 @@
   .sidebar {
     width: 250px;
   }
+}
+
+/* =========================================================
+   CERTIFICATE TYPE SWITCH 
+   ========================================================= */
+
+.cert-type-switch {
+  display: flex;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.cert-type-switch button {
+  padding: 8px 16px;
+  border: none;
+  background: #fafbfd;
+  color: var(--ink-soft);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.cert-type-switch button + button {
+  border-left: 1px solid var(--border);
+}
+
+.cert-type-switch button.active {
+  background: var(--brand-blue);
+  color: #fff;
+}
+
+.cert-type-switch button:hover:not(.active):not(:disabled) {
+  background: #eaf3fb;
+  color: var(--brand-blue);
+}
+
+.cert-type-switch button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
 }
